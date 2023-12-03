@@ -1,10 +1,10 @@
-﻿namespace Client
+﻿namespace Client;
+
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        Client client = new Client();
+        Client.SentMsg(args[0],args[1]);
     }
 }
