@@ -12,7 +12,7 @@ namespace Client;
 
 public class Client
 {
-    public static void SentMsg(string senderMame, string ip)
+    public static void SentMsg(string senderName, string ip)
     {
         UdpClient udpClient = new UdpClient();
         IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
@@ -27,7 +27,7 @@ public class Client
                 msgText = Console.ReadLine();
             }
             while (string.IsNullOrEmpty(msgText));
-            Message message = new Message() { Text = msgText, Sender = "senderMame", Reciver = "Sevrer", MessageTime = DateTime.Now };
+            Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Sevrer", MessageTime = DateTime.Now };
             string serialisedMsg = message.SerializeMessageToJson();
             byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
 
