@@ -15,14 +15,14 @@ public class Client
     public static void SentMsg(string senderName, string ip)
     {
         UdpClient udpClient = new UdpClient();
-        IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
+        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
 
         while (true)
         {
             string msgText;
             do
             {
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine("Enter message text:");
                 msgText = Console.ReadLine();
             }
@@ -30,10 +30,11 @@ public class Client
             Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Sevrer", MessageTime = DateTime.Now };
             string serialisedMsg = message.SerializeMessageToJson();
             byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
-
-            udpClient.Send(data, data.Length, iPEndPoint);
-
-            
+            udpClient.Send(data, data.Length, serverEndPoint);
+            ///Ниже Блок с ДЗ
+            byte[] confirmation = udpClient.Receive(ref serverEndPoint);
+            string confirmationMsg = Encoding.UTF8.GetString(confirmation);
+            Console.WriteLine("Server confirmation: " +confirmationMsg);            
         }
 
     }
