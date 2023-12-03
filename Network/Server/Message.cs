@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Server;
 
-internal class Message
+public class Message
 {
+    public string Text { get; set; }
+    public string RecievedFrom { get; set; }
+    public string RecievedTo { get; set; }
+    public DateTime MessageTime { get; set; }
 
 }
