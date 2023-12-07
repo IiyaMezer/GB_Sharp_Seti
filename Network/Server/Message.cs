@@ -23,6 +23,11 @@ public class Message
         Console.WriteLine($"|{this.Reciver}| resieved msg: |{this.Text}| from |{this.Sender}| in time: |{this.MessageTime}|");
     }
 
+    public void PrintText()
+    {
+        Console.WriteLine($"Message text: {this.Text}");
+    }
+
     public override string ToString()
     {
         return

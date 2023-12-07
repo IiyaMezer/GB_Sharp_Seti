@@ -10,16 +10,16 @@ namespace Server;
 
 public class Server
 {
-    public void ServerMsg(string name)
+    public async void ServerMsg(string name)
     {
         UdpClient server = new UdpClient(12345);
         IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        CancellationTokenSource cts = new CancellationTokenSource();
         Console.WriteLine("Server started.");
-
-
         Console.WriteLine("Waiting for message...");
 
-        while (true)
+        bool b = true;
+        while (b)
         {
             byte[] buffer = server.Receive(ref clientEndPoint);
             if (buffer == null) break;
@@ -27,10 +27,16 @@ public class Server
 
             Message newMessage = Message.DeserializeMessageToJson(messageText);
             newMessage.ResieveConfirmation();
-
-            //Блок с ДЗ
+            
             byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
             server.Send(cofirm, cofirm.Length, clientEndPoint);
+            if (newMessage.Text.ToLower().Equals("exit"))
+            {
+                newMessage.PrintText();
+                cts.Cancel();
+            }
+
+            
         }
 
     }
