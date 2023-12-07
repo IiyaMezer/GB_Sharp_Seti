@@ -18,8 +18,7 @@ public class Server
         Console.WriteLine("Server started.");
         Console.WriteLine("Waiting for message...");
 
-        bool b = true;
-        while (b)
+        while (!cts.IsCancellationRequested)
         {
             byte[] buffer = server.Receive(ref clientEndPoint);
             if (buffer == null) break;
@@ -33,6 +32,8 @@ public class Server
             if (newMessage.Text.ToLower().Equals("exit"))
             {
                 newMessage.PrintText();
+                await Console.Out.WriteLineAsync("press any key to shutdown server");
+                Console.ReadLine();
                 cts.Cancel();
             }
 

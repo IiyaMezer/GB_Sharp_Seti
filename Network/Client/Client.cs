@@ -31,7 +31,7 @@ public class Client
             string serialisedMsg = message.SerializeMessageToJson();
             byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
             udpClient.Send(data, data.Length, serverEndPoint);
-            ///Ниже Блок с ДЗ
+            
             byte[] confirmation = udpClient.Receive(ref serverEndPoint);
             string confirmationMsg = Encoding.UTF8.GetString(confirmation);
             Console.WriteLine("Server confirmation: " +confirmationMsg);            
