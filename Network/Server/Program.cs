@@ -8,8 +8,8 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Server server = new Server();
-        server.ServerMsg("Helowossasd");
+        Server server = new Server(12345);
+        server.Start();
     }
     
 }

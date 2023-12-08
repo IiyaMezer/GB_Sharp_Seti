@@ -10,28 +10,45 @@ namespace Server;
 
 public class Server
 {
-    public void ServerMsg(string name)
+    private UdpClient udpServer;
+
+    public Server(int port)
     {
-        UdpClient server = new UdpClient(12345);
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        udpServer = new UdpClient(port);
+    }
+
+    public void Start()
+    {
         Console.WriteLine("Server started.");
+        Console.WriteLine("Waiting for messages...");
 
-
-        Console.WriteLine("Waiting for message...");
-
-        while (true)
+        try
         {
-            byte[] buffer = server.Receive(ref clientEndPoint);
-            if (buffer == null) break;
-            var messageText = Encoding.UTF8.GetString(buffer);
+            while (true)
+            {
+                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] buffer = udpServer.Receive(ref clientEndPoint);
 
-            Message newMessage = Message.DeserializeMessageToJson(messageText);
-            newMessage.ResieveConfirmation();
+                if (buffer == null)
+                    break;
 
-            //Блок с ДЗ
-            byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
-            server.Send(cofirm, cofirm.Length, clientEndPoint);
+                string messageText = Encoding.UTF8.GetString(buffer);
+
+                Message newMessage = Message.DeserializeMessageToJson(messageText);
+                newMessage.ReceiveConfirmation();
+
+                // Блок с ДЗ
+                byte[] confirmation = Encoding.UTF8.GetBytes("Message received");
+                udpServer.Send(confirmation, confirmation.Length, clientEndPoint);
+            }
         }
-
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            udpServer.Close();
+        }
     }
 }

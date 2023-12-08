@@ -18,7 +18,7 @@ public class Message
 
     public static Message? DeserializeMessageToJson(string jsonMessage) => JsonSerializer.Deserialize<Message>(jsonMessage);
 
-    public void ResieveConfirmation()
+    public void ReceiveConfirmation()
     {
         Console.WriteLine($"|{this.Reciver}| resieved msg: |{this.Text}| from |{this.Sender}| in time: |{this.MessageTime}|");
     }
