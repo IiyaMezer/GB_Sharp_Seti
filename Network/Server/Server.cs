@@ -24,11 +24,10 @@ public class Server
         Thread receiveThread = new Thread(ReceiveMessages);
         receiveThread.Start();
 
-        Console.WriteLine("Press any key to shutdown server");
-        Console.ReadKey();
+        
         ServerIsRunning = false;
 
-        receiveThread.Join(); // Дождаться завершения потока приема
+        receiveThread.Join(); 
         udpServer.Close();
         Console.WriteLine("Zavershenie raboti.");
     }
@@ -53,6 +52,8 @@ public class Server
                 udpServer.Send(cofirm, cofirm.Length, clientEndPoint);
                 if (messageText.ToLower() == "exit")
                 {
+                    Console.WriteLine("Press any key to shutdown server");
+                    Console.ReadKey();
                     ServerIsRunning = false;
                     break;
                 }
