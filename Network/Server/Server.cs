@@ -40,6 +40,12 @@ public class Server
                 // Блок с ДЗ
                 byte[] confirmation = Encoding.UTF8.GetBytes("Message received");
                 udpServer.Send(confirmation, confirmation.Length, clientEndPoint);
+                if (newMessage.Text.ToLower().Equals("exit"))
+                {
+                    Console.WriteLine("Server is shutting down. Press any key to exit.");
+                    Console.ReadKey();
+                    break;
+                }
             }
         }
         catch (Exception ex)
