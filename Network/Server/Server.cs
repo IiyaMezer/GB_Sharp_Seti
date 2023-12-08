@@ -10,28 +10,53 @@ namespace Server;
 
 public class Server
 {
-    public void ServerMsg(string name)
+    private UdpClient udpServer;
+    private bool ServerIsRunning = true;
+
+    public Server(int port)
     {
-        UdpClient server = new UdpClient(12345);
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
-        Console.WriteLine("Server started.");
-
-
+        udpServer = new UdpClient(port);
+    }
+    public void Start()
+    {
         Console.WriteLine("Waiting for message...");
 
-        while (true)
+        Thread receiveThread = new Thread(ReceiveMessages);
+        receiveThread.Start();
+
+        Console.WriteLine("Press any key to shutdown server");
+        Console.ReadKey();
+        ServerIsRunning = false;
+
+        receiveThread.Join(); // Дождаться завершения потока приема
+        udpServer.Close();
+        Console.WriteLine("Zavershenie raboti.");
+    }
+
+    private void ReceiveMessages()
+    {
+        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+        try
         {
-            byte[] buffer = server.Receive(ref clientEndPoint);
-            if (buffer == null) break;
-            var messageText = Encoding.UTF8.GetString(buffer);
+            while (ServerIsRunning)
+            {
+                byte[] buffer = udpServer.Receive(ref clientEndPoint);
+                if (buffer == null) break;
+                var messageText = Encoding.UTF8.GetString(buffer);
 
-            Message newMessage = Message.DeserializeMessageToJson(messageText);
-            newMessage.ResieveConfirmation();
+                Message newMessage = Message.DeserializeMessageToJson(messageText);
+                newMessage.ResieveConfirmation();
 
-            //Блок с ДЗ
-            byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
-            server.Send(cofirm, cofirm.Length, clientEndPoint);
+
+                byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
+                udpServer.Send(cofirm, cofirm.Length, clientEndPoint);
+            }
         }
-
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}") ;
+        }
+        
     }
 }

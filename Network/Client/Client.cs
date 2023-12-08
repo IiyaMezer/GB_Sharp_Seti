@@ -12,10 +12,45 @@ namespace Client;
 
 public class Client
 {
-    public static void SentMsg(string senderName, string ip)
+    public UdpClient udpClient;
+    public Client()
     {
-        UdpClient udpClient = new UdpClient();
+        udpClient = new UdpClient();
+    }
+    public void Start(string ip, string senderName)
+    {
         IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
+        var sendThread = new Thread(() => SentMsg(senderName, serverEndPoint));
+        var recieveThread = new Thread(() => RecieveConfirmation());
+        sendThread.Start();
+        recieveThread.Start();
+
+        sendThread.Join();
+        recieveThread.Join(); 
+        udpClient.Close();
+
+    }
+
+    private void RecieveConfirmation()
+    {
+        try
+        {
+            while (true)
+            {
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] confirmation = udpClient.Receive(ref serverEndPoint);
+                string confirmationMsg = Encoding.UTF8.GetString(confirmation);
+                Console.WriteLine("Server confirmation: " + confirmationMsg);
+            }
+        }catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+
+    private void SentMsg(string senderName, IPEndPoint serverEndPoint)
+    {        
 
         while (true)
         {
@@ -31,10 +66,13 @@ public class Client
             string serialisedMsg = message.SerializeMessageToJson();
             byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
             udpClient.Send(data, data.Length, serverEndPoint);
-            ///Ниже Блок с ДЗ
-            byte[] confirmation = udpClient.Receive(ref serverEndPoint);
-            string confirmationMsg = Encoding.UTF8.GetString(confirmation);
-            Console.WriteLine("Server confirmation: " +confirmationMsg);            
+
+            if (msgText.ToLower() == "exit")
+            {
+                Console.WriteLine("Client is shutting down.");
+                break;
+            }
+
         }
 
     }
