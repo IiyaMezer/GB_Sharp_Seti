@@ -13,28 +13,18 @@ public class Server
     private UdpClient udpServer;
     private bool ServerIsRunning = true;
 
-    public Server(int port)
+    public void ServerStart()
     {
-        udpServer = new UdpClient(port);
-    }
-    public void Start()
-    {
-        Console.WriteLine("Waiting for message...");
-
+        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000);
+        udpServer = new UdpClient(serverEndPoint);
+        Console.WriteLine("Waiting for message...");        
         Thread receiveThread = new Thread(ReceiveMessages);
         receiveThread.Start();
-
-        
-        ServerIsRunning = false;
-
-        receiveThread.Join(); 
-        udpServer.Close();
-        Console.WriteLine("Zavershenie raboti.");
     }
 
     private void ReceiveMessages()
     {
-        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
 
         try
         {
@@ -50,10 +40,10 @@ public class Server
 
                 byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
                 udpServer.Send(cofirm, cofirm.Length, clientEndPoint);
-                if (messageText.ToLower() == "exit")
+                if (messageText.ToLower().Equals("exit"))
                 {
                     Console.WriteLine("Press any key to shutdown server");
-                    Console.ReadKey();
+                    Console.ReadKey();                    
                     ServerIsRunning = false;
                     break;
                 }
@@ -63,6 +53,11 @@ public class Server
         {
             Console.WriteLine($"Error: {ex.Message}") ;
         }
-        
+        finally
+        {
+            udpServer.Close();
+            Console.WriteLine("Zavershenie raboti.");
+        }
+
     }
 }

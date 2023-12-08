@@ -19,10 +19,9 @@ public class Client
     }
     public void ClientStart(string ip, string senderName)
     {
-        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
+        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 50000);
         var sendThread = new Thread(() => SentMsg(senderName, serverEndPoint));
         var recieveThread = new Thread(() => RecieveConfirmation());
-        udpClient.Client.Bind(serverEndPoint);
         sendThread.Start();
         recieveThread.Start();
 
@@ -38,7 +37,8 @@ public class Client
         {
             while (true)
             {
-                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000);      
+                
                 byte[] confirmation = udpClient.Receive(ref serverEndPoint);
                 string confirmationMsg = Encoding.UTF8.GetString(confirmation);
                 Console.WriteLine("Server confirmation: " + confirmationMsg);
@@ -51,10 +51,12 @@ public class Client
     }
 
     private void SentMsg(string senderName, IPEndPoint serverEndPoint)
-    {        
+    {
+
 
         while (true)
         {
+            
             string msgText;
             do
             {
@@ -63,7 +65,7 @@ public class Client
                 msgText = Console.ReadLine();
             }
             while (string.IsNullOrEmpty(msgText));
-            Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Sevrer", MessageTime = DateTime.Now };
+            Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Server", MessageTime = DateTime.Now };
             string serialisedMsg = message.SerializeMessageToJson();
             byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
             udpClient.Send(data, data.Length, serverEndPoint);

@@ -8,10 +8,18 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Server server = new Server(12345);
-        var serverThread = new System.Threading.Thread(server.Start);
-        serverThread.Start();
-        serverThread.Join();
+        try
+        {
+            Server server = new Server();
+            var serverThread = new Thread(server.ServerStart);
+            serverThread.Start();
+            serverThread.Join();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
     }
     
 }
