@@ -17,7 +17,7 @@ public class Client
     {
         udpClient = new UdpClient();
     }
-    public void Start(string ip, string senderName)
+    public void ClientStart(string ip, string senderName)
     {
         IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
         var sendThread = new Thread(() => SentMsg(senderName, serverEndPoint));
