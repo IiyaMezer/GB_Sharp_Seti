@@ -51,6 +51,11 @@ public class Server
 
                 byte[] cofirm = Encoding.UTF8.GetBytes("Message resieved");
                 udpServer.Send(cofirm, cofirm.Length, clientEndPoint);
+                if (messageText.ToLower() == "exit")
+                {
+                    ServerIsRunning = false;
+                    break;
+                }
             }
         }
         catch (Exception ex)

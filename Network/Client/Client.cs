@@ -22,6 +22,7 @@ public class Client
         IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
         var sendThread = new Thread(() => SentMsg(senderName, serverEndPoint));
         var recieveThread = new Thread(() => RecieveConfirmation());
+        udpClient.Client.Bind(serverEndPoint);
         sendThread.Start();
         recieveThread.Start();
 
