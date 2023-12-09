@@ -99,4 +99,8 @@ public class Server
             udpServer.Close();
         }
     }
+    public void Stop()
+    {
+        cts.Cancel();
+    }
 }

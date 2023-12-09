@@ -6,10 +6,15 @@ namespace Server;
 
 internal class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         Server server = new Server(12345);
-        server.Start();
+        //server.Start();
+        Task serverTask = server.StartAsync();
+        Console.WriteLine("Press Enter to stop the server.");
+        Console.ReadLine();
+        server.Stop();
+        await serverTask;
     }
     
 }
