@@ -76,10 +76,8 @@ public class Client
         IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
         try
         {
-            Task sendTask = SentMsgAsync(senderName, serverEndPoint);
-            Task recieveTask = ReceiveConfirmationAsync(serverEndPoint);
             udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, 0));
-            await Task.WhenAll(sendTask, recieveTask);
+            await SentMsgAsync(senderName, serverEndPoint); ;
         }
         catch (Exception ex) { Console.WriteLine(ex.Message); }
         finally
@@ -123,13 +121,21 @@ public class Client
                 string serialisedMsg = message.SerializeMessageToJson();
                 byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
 
-                await udpClient.SendAsync(data, data.Length, serverEndPoint);
+                Task sendTask =  udpClient.SendAsync(data, data.Length, serverEndPoint);
+                await sendTask;
 
                 if (msgText.ToLower().Equals("exit"))
                 {
-                    Console.WriteLine("Shutting down");
+                    Console.WriteLine("Shutting down");   
                     break;
                 }
+
+                UdpReceiveResult receiveResult = await udpClient.ReceiveAsync();
+                byte[] confirmation = receiveResult.Buffer;
+                string confirmationMsg = Encoding.UTF8.GetString(confirmation);
+                Console.WriteLine("Server confirmation: " + confirmationMsg);
+ 
+
             }
         }
         catch (Exception ex) { Console.WriteLine(ex.Message); }

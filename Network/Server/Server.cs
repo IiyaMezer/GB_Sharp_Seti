@@ -66,6 +66,7 @@ public class Server
     {
         Console.WriteLine("Server started.");
         Console.WriteLine("Waiting for messages...");
+        
         CancellationToken cancellationToken = cts.Token;
 
         try
