@@ -70,4 +70,68 @@ public class Client
 
 
     }
+
+    public async Task StartAsync(string senderName, string ip)
+    {
+        IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
+        try
+        {
+            Task sendTask = SentMsgAsync(senderName, serverEndPoint);
+            Task recieveTask = ReceiveConfirmationAsync(serverEndPoint);
+            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, 0));
+            await Task.WhenAll(sendTask, recieveTask);
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
+        finally
+        { 
+            udpClient.Close(); 
+        }
+
+
+    }
+
+    private async Task ReceiveConfirmationAsync(IPEndPoint serverEndPoint)
+    {
+        try
+        {
+            while (true)
+            {
+                byte[] confirmation = udpClient.Receive(ref serverEndPoint);
+                string confirmationMsg = Encoding.UTF8.GetString(confirmation);
+                Console.WriteLine("Server confirmation: " + confirmationMsg);
+            }
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+    }
+
+    private async Task SentMsgAsync(string senderName, IPEndPoint serverEndPoint)
+    {
+        try
+        {
+            while (true)
+            {
+                string msgText;
+                do
+                {
+                    Console.WriteLine("Enter message text('Exit' to exit):");
+                    msgText = Console.ReadLine();
+                }
+                while (string.IsNullOrEmpty(msgText));
+                Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Sevrer", MessageTime = DateTime.Now };
+
+                string serialisedMsg = message.SerializeMessageToJson();
+                byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
+
+                await udpClient.SendAsync(data, data.Length, serverEndPoint);
+
+                if (msgText.ToLower().Equals("exit"))
+                {
+                    Console.WriteLine("Shutting down");
+                    break;
+                }
+            }
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
+    }
 }

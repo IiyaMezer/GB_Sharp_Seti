@@ -2,9 +2,10 @@
 
 internal class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         Client client = new Client();
-        client.Start(args[0],args[1]);
+        //client.Start(args[0],args[1]);
+        await client.StartAsync(args[0], args[1]);
     }
 }
