@@ -59,7 +59,8 @@ public class Client
                     msgText = Console.ReadLine();
                 }
                 while (string.IsNullOrEmpty(msgText));
-                Message message = new Message() { Text = msgText, Sender = senderName, Reciver = "Sevrer", MessageTime = DateTime.Now };
+                MessageBuilder messageBuilder = new();                
+                Message message = messageBuilder.Text(msgText).From(senderName).To("Sevrer").Time(DateTime.Now).Built();
 
                 string serialisedMsg = message.SerializeMessageToJson();
                 byte[] data = Encoding.UTF8.GetBytes(serialisedMsg);
