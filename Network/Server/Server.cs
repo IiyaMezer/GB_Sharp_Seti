@@ -10,14 +10,34 @@ namespace Server;
 
 public class Server
 {
+    private readonly ObserverManager _observerManager = new ObserverManager();
+    private static Server _instance;//singleton
     private UdpClient udpServer;
+    
     private CancellationTokenSource cts;
 
-    public Server(int port)
+    public void SubcribeObserver(IMessageObserver observer)
+    {
+        _observerManager.Subscribe(observer);
+    }
+
+    public void UnsubcribeObserver(IMessageObserver observer)
+    {
+        _observerManager.Unsubscribe(observer);
+    }
+
+
+    private Server(int port)
     {
         udpServer = new UdpClient(port);
+        
         cts = new CancellationTokenSource();
 
+    }
+
+    public static Server GetInstance(int port)
+    {
+        return _instance ??= new Server(port);
     }
 
     public async Task StartAsync()
@@ -36,7 +56,7 @@ public class Server
                 string messageText = Encoding.UTF8.GetString(receiveResult.Buffer);
 
                 Message newMessage = Message.DeserializeMessageToJson(messageText);
-                newMessage.ReceiveConfirmation();
+                _observerManager.NotifyMessageReceived(newMessage);
 
 
                 byte[] confirmation = Encoding.UTF8.GetBytes("Message received");
