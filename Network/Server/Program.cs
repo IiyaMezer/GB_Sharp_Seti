@@ -11,6 +11,13 @@ internal class Program
         Server server = Server.GetInstance(12345);
         //server.Start();
         Task serverTask = server.StartAsync();
+         var observerA = new ConsoleMessageObserver();
+        var observerB = new ConsoleMessageObserver();
+
+        server.SubcribeObserver(observerA);
+        server.SubcribeObserver(observerB);
+        server.UnsubcribeObserver(observerA);
+
         Console.WriteLine("Press Enter to stop the server.");
         Console.ReadLine();
         server.Stop();
