@@ -14,7 +14,7 @@ namespace DB
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=GB;Trusted_Connection=True;");
         }
         public ChatContext(DbSet<User> users, DbSet<Message> messages)
         {
