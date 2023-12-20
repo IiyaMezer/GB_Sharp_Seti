@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,4 +66,14 @@ public class ChatContext: DbContext
     }
 
 
+}
+
+public class ChatContextFactory : IDesignTimeDbContextFactory<ChatContext>
+{
+    public ChatContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ChatContext>();
+
+        return new ChatContext(optionsBuilder.Options);
+    }
 }
