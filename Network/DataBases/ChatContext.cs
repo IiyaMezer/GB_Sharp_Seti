@@ -52,9 +52,14 @@ public class ChatContext: DbContext
             entity.Property(e => e.IsSent).HasColumnName("is_sent");
             entity.Property(e => e.MessageId).HasColumnName("id");
 
-            entity.HasOne(x => x.RecieverId).WithMany(m => m.MessagesTo);
-            entity.HasOne(x => x.SenderId).WithMany(m => m.MessagesFrom)
-            .HasForeignKey(x=> x.SenderId)
+            entity.HasOne(x => x.RecieverId)
+            .WithMany(m => m.MessagesTo)
+            .HasForeignKey(x=> x.UserToId)
+            .HasConstraintName("message_to_user_foreign_key");
+
+            entity.HasOne(x => x.SenderId)
+            .WithMany(m => m.MessagesFrom)
+            .HasForeignKey(x=> x.UserFromId)
             .HasConstraintName("message_from_user_foreign_key");
 
 
