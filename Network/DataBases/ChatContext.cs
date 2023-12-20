@@ -65,15 +65,17 @@ public class ChatContext: DbContext
         optionsBuilder.UseSqlServer(@"Server=.; Database=GB;Integrated Security=False;TrustServerCertificate=True; Trusted_Connection=True;").UseLazyLoadingProxies();
     }
 
-
-}
-
-public class ChatContextFactory : IDesignTimeDbContextFactory<ChatContext>
-{
-    public ChatContext CreateDbContext(string[] args)
+    public class ChatContextFactory
     {
-        var optionsBuilder = new DbContextOptionsBuilder<ChatContext>();
+        public ChatContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ChatContext>();
 
-        return new ChatContext(optionsBuilder.Options);
+            return new ChatContext(optionsBuilder.Options);
+        }
     }
+
+
+
 }
+
