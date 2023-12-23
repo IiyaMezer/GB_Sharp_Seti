@@ -7,21 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBases;
+namespace DataBases.Models;
 
-public class ChatContext: DbContext
+public class ChatContext : DbContext
 
 {
     public ChatContext(DbContextOptions<ChatContext> options) : base(options)
     {
 
     }
-    public ChatContext() 
+    public ChatContext()
     {
 
     }
-    public  DbSet<User> Users { get; set; }
-    public  DbSet<Message> Messages { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
 
 
@@ -30,12 +30,12 @@ public class ChatContext: DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<User>(entity =>
         {
-            entity.ToTable("users"); 
+            entity.ToTable("users");
 
             entity.HasKey(x => x.Id).HasName("users_pkey");
             entity.HasIndex(x => x.Fullname).IsUnique();
 
-            
+
 
             entity.Property(e => e.Fullname).HasColumnName("FullName").
             HasMaxLength(255).IsRequired();
@@ -54,15 +54,13 @@ public class ChatContext: DbContext
 
             entity.HasOne(x => x.RecieverId)
             .WithMany(m => m.MessagesTo)
-            .HasForeignKey(x=> x.UserToId)
+            .HasForeignKey(x => x.UserToId)
             .HasConstraintName("message_to_user_foreign_key");
 
             entity.HasOne(x => x.SenderId)
             .WithMany(m => m.MessagesFrom)
-            .HasForeignKey(x=> x.UserFromId)
+            .HasForeignKey(x => x.UserFromId)
             .HasConstraintName("message_from_user_foreign_key");
-
-
         });
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
