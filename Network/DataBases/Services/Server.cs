@@ -24,7 +24,7 @@ public class Server
 
     }
 
-    public void Start()
+    public async Task Start()
     {
 
         endPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -39,7 +39,7 @@ public class Server
                 var message = _messageSource.Recieve(ref endPoint);
                 message.ReceiveConfirmation();
 
-                ProcessMessage(message);
+                await ProcessMessage(message);
             }
             catch (Exception ex)
             {

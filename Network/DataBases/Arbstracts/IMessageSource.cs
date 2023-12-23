@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using DataBases.Models;
 using UnitTests;
+using DataBases.Models;
+
 
 namespace DataBases.Arbstracts
 {
-    internal interface IMessageSource
+    public interface IMessageSource
     {
         Task SendAsync(NetMessage message, IPEndPoint endPoint);
 
