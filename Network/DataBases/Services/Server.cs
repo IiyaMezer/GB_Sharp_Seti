@@ -18,10 +18,16 @@ public class Server
     Dictionary<string, IPEndPoint> _clients = new Dictionary<string, IPEndPoint>();
     private IPEndPoint endPoint;
     private readonly IMessageSource _messageSource;
+    
     public Server()
     {
         _messageSource = new UdpMessageSource();
 
+    }
+    public Server(IMessageSource messageSouce)
+    {
+        _messageSource = messageSouce;
+        endPoint = new IPEndPoint(IPAddress.Any, 0);
     }
 
     public async Task Start()
@@ -43,7 +49,6 @@ public class Server
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex); ;
             }
         }
@@ -118,4 +123,12 @@ public class Server
             }
         }
     }
+
+    bool work = true;
+    public void Stop()
+    {
+        work = false;
+    }
+
+
 }

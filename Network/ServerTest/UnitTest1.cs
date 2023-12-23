@@ -1,28 +1,76 @@
+using DataBases.Models;
+using DataBases.Services;
+
 namespace ServerTest
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
     public class Tests : PageTest
     {
-        [Test]
-        public async Task HomepageHasPlaywrightInTitleAndGetStartedLinkLinkingtoTheIntroPage()
+        
+        [SetUp]
+        public void SetUp()
         {
-            await Page.GotoAsync("https://playwright.dev");
+            using (ChatContext chatContext = new ChatContext())
+            {
+                chatContext.Messages.RemoveRange(chatContext.Messages);
+                chatContext.Users.RemoveRange(chatContext.Users);
 
-            // Expect a title "to contain" a substring.
-            await Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
+                chatContext.SaveChanges();
+            }
+        }
 
-            // create a locator
-            var getStarted = Page.Locator("text=Get Started");
+        [TearDown]
+        public void TearDown()
+        {
+            using (ChatContext chatContext = new ChatContext())
+            {
+                chatContext.Messages.RemoveRange(chatContext.Messages);
+                chatContext.Users.RemoveRange(chatContext.Users);
 
-            // Expect an attribute "to be strictly equal" to the value.
-            await Expect(getStarted).ToHaveAttributeAsync("href", "/docs/intro");
+                chatContext.SaveChanges();
+            }
+        }
+        [Test]
+        public async Task ServerTest()
+        {
+            var mock = new MockMessageSource();
 
-            // Click the get started link.
-            await getStarted.ClickAsync();
+            var serv = new Server(mock);
+            
+            mock.AddServer(serv);
 
-            // Expects the URL to contain intro.
-            await Expect(Page).ToHaveURLAsync(new Regex(".*intro"));
+            await serv.Start();
+
+            using (var ctx = new ChatContext())
+            {
+                Assert.IsTrue(ctx.Users.Count() == 2, "Users not created");
+
+                var user1 = ctx.Users.FirstOrDefault(x => x.Fullname == "Ilya");
+                var user2 = ctx.Users.FirstOrDefault(x => x.Fullname == "Irina");
+
+                Assert.IsNotNull(user1, "User not created");
+                Assert.IsNotNull(user2, "User not created");
+
+                Assert.IsTrue(user1.MessagesFrom.Count == 1);
+                Assert.IsTrue(user2.MessagesFrom.Count == 1);
+
+                Assert.IsTrue(user1.MessagesTo.Count == 1);
+                Assert.IsTrue(user2.MessagesTo.Count == 1);
+
+                var msg1 = ctx.Messages.FirstOrDefault(x => x.SenderId  == user1 && x.RecieverId == user2);
+                var msg2 = ctx.Messages.FirstOrDefault(x => x.SenderId == user2 && x.RecieverId == user1);
+
+                Assert.AreEqual("Irina's message", msg2.Text);
+                Assert.AreEqual("Ilya's message", msg1.Text);
+            }
+
+
+
+
+
+
+
         }
     }
 }
