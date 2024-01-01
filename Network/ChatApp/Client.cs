@@ -2,6 +2,7 @@
 using System.Net;
 using ChatCommon.Abstractions;
 using ChatCommon.Models;
+using NetMQ;
 
 namespace ChatApp
 
@@ -35,6 +36,10 @@ namespace ChatApp
                     await Confirm(messageReceived, remoteEndPoint);
 
                 }
+                catch (NetMQ.FiniteStateMachineException e)
+                {
+
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Ошибка при получении сообщения: " + ex.Message);
@@ -50,8 +55,7 @@ namespace ChatApp
 
 
         public void Register(T remoteEndPoint)
-        {
-            IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
+        {            
             var message = new NetMessage() { NickNameFrom = _name, NickNameTo = null, Text = null, Command = Command.Register, EndPoint = ep };
             _messageSource.SendAsync(message, remoteEndPoint);
         }
