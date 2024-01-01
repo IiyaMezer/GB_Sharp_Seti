@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBases", "DataBases\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTest", "ServerTest\ServerTest.csproj", "{907B63A6-7EF7-43D9-B7CA-AF20915E4C39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp", "ChatApp\ChatApp.csproj", "{3BCD9740-A6CE-4AC6-A171-0599F17DB8DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApp", "ChatApp\ChatApp.csproj", "{3BCD9740-A6CE-4AC6-A171-0599F17DB8DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCommon", "ChatCommon\ChatCommon.csproj", "{8145375B-F5A8-4544-92E0-A0F478DF633D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCommon", "ChatCommon\ChatCommon.csproj", "{8145375B-F5A8-4544-92E0-A0F478DF633D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatDB", "ChatDB\ChatDB.csproj", "{AB5A9A87-C5C0-47F1-BC5C-19B3D5161FDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartChat", "StartChat\StartChat.csproj", "{2B751772-23DF-4794-933D-374B55C29FEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartChat", "StartChat\StartChat.csproj", "{2B751772-23DF-4794-933D-374B55C29FEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatDB", "ChatDB\ChatDB.csproj", "{C792C7A8-E0A2-4578-BA3F-19A48B871944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +49,14 @@ Global
 		{8145375B-F5A8-4544-92E0-A0F478DF633D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8145375B-F5A8-4544-92E0-A0F478DF633D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8145375B-F5A8-4544-92E0-A0F478DF633D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB5A9A87-C5C0-47F1-BC5C-19B3D5161FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB5A9A87-C5C0-47F1-BC5C-19B3D5161FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB5A9A87-C5C0-47F1-BC5C-19B3D5161FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB5A9A87-C5C0-47F1-BC5C-19B3D5161FDC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B751772-23DF-4794-933D-374B55C29FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B751772-23DF-4794-933D-374B55C29FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B751772-23DF-4794-933D-374B55C29FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B751772-23DF-4794-933D-374B55C29FEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C792C7A8-E0A2-4578-BA3F-19A48B871944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C792C7A8-E0A2-4578-BA3F-19A48B871944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C792C7A8-E0A2-4578-BA3F-19A48B871944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C792C7A8-E0A2-4578-BA3F-19A48B871944}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
