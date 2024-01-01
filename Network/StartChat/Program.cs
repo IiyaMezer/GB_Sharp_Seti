@@ -1,5 +1,7 @@
 ﻿using ChatApp;
 using System.Net;
+using NetMQ;
+using MessageSourceNetMQ;
 
 internal class Program
 {
@@ -7,14 +9,14 @@ internal class Program
     {
         if (args.Length == 0)
         {
-            var s = new Server<IPEndPoint>(new UdpMessageSouceServer());
-            await s.Start();
+            Server<NetMQSocket> server = new(new MessageSourceServerNetMQ("tcp://127.0.0.1:5555"));
+            await server.Start();
         }
         else
         if (args.Length == 1)
         {
-            var c = new Client<IPEndPoint>(new UdpMessageSourceClient(), args[0]);
-            await c.Start();
+            Client<NetMQSocket> client = new(new MessageSourceClientNetMQ(), args[0]);
+            await client.Start();
         }
         else
         {

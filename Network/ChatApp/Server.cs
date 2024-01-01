@@ -65,7 +65,7 @@ namespace ChatApp
             }
             else
             {
-                Console.WriteLine("Пользователь не найден.");
+                Console.WriteLine("User no found.");
             }
 
         }
@@ -99,7 +99,7 @@ namespace ChatApp
         public async Task Start()
         {
 
-            Console.WriteLine("Сервер ожидает сообщения ");
+            Console.WriteLine("Server Waiting For Mesages");
 
             while (work)
             {

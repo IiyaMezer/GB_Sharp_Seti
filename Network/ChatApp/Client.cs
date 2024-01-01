@@ -54,7 +54,6 @@ namespace ChatApp
             IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
             var message = new NetMessage() { NickNameFrom = _name, NickNameTo = null, Text = null, Command = Command.Register, EndPoint = ep };
             _messageSource.SendAsync(message, remoteEndPoint);
-            Console.WriteLine("Мы тута");
         }
 
         public async Task ClientSender()
