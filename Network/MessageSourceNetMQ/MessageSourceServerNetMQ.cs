@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApp
+namespace MessageSourceNetMQ
 {
-    public interface IMessageSource
+    internal class MessageSourceServerNetMQ
     {
-
     }
 }
